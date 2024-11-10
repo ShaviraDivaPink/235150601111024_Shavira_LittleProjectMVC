@@ -1,10 +1,10 @@
 <?php
 
-include_once("model/ProgramKerja.php");
+include_once("../model/ProgramKerja.php");
 
-class ProgramKerjaController 
+class ProgramKerjaController
 {
-    private $programModel;
+    public $programModel;
 
     public function __construct()
     {
@@ -13,31 +13,62 @@ class ProgramKerjaController
 
     public function viewAddProker()
     {
-        include("views/add_proker.php");
+        include("../views/add_proker.php");
     }
 
     public function viewEditProker()
     {
-        include("views/edit_proker.php");
+        include("../views/edit_proker.php");
     }
 
     public function viewListProker()
     {
-        include("views/list_proker.php");
+        $programList = $this->programModel->fetchAllProgramKerja();
+        // var_dump($programList);
+        include("../views/list_proker.php");
     }
 
     public function addProker()
     {
-        // implementasi logic nambah proker dengan pemanggila model juga
+        $nomor = $_POST['nomor'];
+        $nama = $_POST['nama'];
+        $suratKeterangan = $_POST['surat_keterangan'];
+
+        $this->programModel->createModel($nomor, $nama, $suratKeterangan);
+
+        if ($this->programModel->insertProgramKerja()) {
+            header("Location: list_proker.php");
+            exit();
+        } else {
+            echo "Gagal untuk menambahkan program kerja!";
+        }
     }
 
     public function updateProker()
     {
-        // implementasi logic update proker dengan pemanggila model juga
+        $nomor = $_POST['nomor'];
+        $nama = $_POST['nama'];
+        $suratKeterangan = $_POST['surat_keterangan'];
+
+        $this->programModel->createModel($nomor, $nama, $suratKeterangan);
+
+        if ($this->programModel->updateProgramKerja()) {
+            header("Location: list_proker.php");
+            exit();
+        } else {
+            echo "Gagal untuk memperbarui program kerja!";
+        }
     }
 
     public function deleteProker()
     {
-        // implementasi logic hapus proker dengan pemanggila model juga
+        $nomor = $_POST['nomor'];
+
+        if ($this->programModel->deleteProgramKerja($nomor)) {
+            return true;
+        } else {
+            echo "Gagal untuk menghapus program kerja!";
+            return false;
+        }
     }
 }
